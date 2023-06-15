@@ -289,4 +289,4 @@ Also open successful setup of `Google authentication in app. We use it as below 
 ![Screenshot_4](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/bafb06af-4b4f-4bee-a22f-190eba3960a0)
 
 Did you notice how we also used redux toolkit to `dispatch` the `updateProfile` action we saw in `userSlice.ts` earlier? 
-What about the `navigation.navigate('AdditionalSignupInfo') 😊?
+What about the `navigation.navigate('AdditionalSignupInfo')` 😊?
