@@ -290,3 +290,11 @@ Also open successful setup of `Google authentication` in app. We import the `sig
 
 Did you notice how we also used redux toolkit to `dispatch` the `updateProfile` action we saw in `userSlice.ts` earlier? 
 What about the `navigation.navigate('AdditionalSignupInfo')`? 😊
+
+### Publishing your application
+After building your application, you can generate an `apk` that can be installed in your application. To do this navigate to the root project directory and then to the `/android` directory. Run the command below.
+```
+./gradlew assembleRelease
+```
+This command builds your applicaton and create an apk which can be found in `./android/app/build/outputs/apk/release/` directory
+For more instructions on how to build a signed apk [visit the React Native official documentation](https://reactnative.dev/docs/signed-apk-android)
