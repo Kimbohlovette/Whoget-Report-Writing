@@ -285,8 +285,8 @@ To setup firebase, follow the [React Native firebase documentation here](https:/
 After setting up firebase as recommended above, we can use it to store images as seen below in `src/pages/createAsk.tsx` file.
 ![Screenshot_3](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/199e0fd1-853a-4065-af98-a0df21198974)
 
-Also open successful setup of `Google authentication in app. We use it as below in `src/pages/Signup.tsx`
+Also open successful setup of `Google authentication` in app. We import the `signinWithGoogle` function from `firebase/auth` and use it as below in `src/pages/Signup.tsx`
 ![Screenshot_4](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/bafb06af-4b4f-4bee-a22f-190eba3960a0)
 
 Did you notice how we also used redux toolkit to `dispatch` the `updateProfile` action we saw in `userSlice.ts` earlier? 
-What about the `navigation.navigate('AdditionalSignupInfo')` 😊?
+What about the `navigation.navigate('AdditionalSignupInfo')`? 😊
