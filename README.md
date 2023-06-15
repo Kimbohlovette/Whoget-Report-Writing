@@ -241,4 +241,38 @@ Finally we export  our slice as `userSlice.reducer`
 ```
 export default userSlice.reducer;
 ```
+To make this slice available to redux store, open the `src/store/store.ts` add the user reducer
+```
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+...
+import userReducer from './slices/userSlice';
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+  ...
+  },
+});
 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
+```
+The full userSlice is found in `/src/store/slices/userSlice.ts` [Github repo](https://github.com/Kimbohlovette/whoget-mobile-client.git).
+
+### Data Fetching
+All functions for fetching data are found in an `src/apiService/fetchingFunctions.ts` file and exported so that they can be available in any part of the application for use. Data is fetched from an already created backend api server with base url `https://whoget-app-server.onrender.com/api/v1/`. [The full api documentation can be found here](https://github.com/Kimbohlovette/whoget-app-server). 
+
+![image](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/7ffd655e-257e-41dc-8600-5635fb73f1b4)
+
+These fetching functions are then used in various pages as needed. 
+
+Example of data fetching in the `Asks.tsx` page.
+
+![image](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/08b60ad9-58fd-420f-8421-6f517b53ddbf)
+
+The above image demonstrates usage of `fetchPaginatedAsks()` fetching function when a user refreshes a page by pulling down the screen. This is a basic way in which data is pulled and used from the backend. They other pages and components follow this same pattern for data fetching.
