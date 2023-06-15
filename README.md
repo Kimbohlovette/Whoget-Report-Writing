@@ -276,3 +276,17 @@ Example of data fetching in the `Asks.tsx` page.
 ![image](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/08b60ad9-58fd-420f-8421-6f517b53ddbf)
 
 The above image demonstrates usage of `fetchPaginatedAsks()` fetching function when a user refreshes a page by pulling down the screen. This is a basic way in which data is pulled and used from the backend. They other pages and components follow this same pattern for data fetching.
+
+
+### Firebase Services 
+In this application we used `firebase storage` for storing images of posts or asks and firebase's `Google Authentication` service.
+To setup firebase, follow the [React Native firebase documentation here](https://rnfirebase.io/).
+
+After setting up firebase as recommended above, we can use it to store images as seen below in `src/pages/createAsk.tsx` file.
+![Screenshot_3](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/199e0fd1-853a-4065-af98-a0df21198974)
+
+Also open successful setup of `Google authentication in app. We use it as below in `src/pages/Signup.tsx`
+![Screenshot_4](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/bafb06af-4b4f-4bee-a22f-190eba3960a0)
+
+Did you notice how we also used redux toolkit to `dispatch` the `updateProfile` action we saw in `userSlice.ts` earlier? 
+What about the `navigation.navigate('AdditionalSignupInfo') 😊?
