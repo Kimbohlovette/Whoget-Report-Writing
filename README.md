@@ -224,4 +224,21 @@ const initialState: InitialState = {
   status: 'idle',
 };
 ```
-The next thing is to create the user slice with the `createSlice` function exported from redux toolkit. A slice has the following 
+The next thing is to create the user slice with the `createSlice` function exported from redux toolkit. Creating a slice takes an object literal with the following properties `name`,  `initialState`, `reducers`, `extraReducers` etc. But we are going to talk only about the ones listed above.
+.
+- the `name` property takes a unique string which is used by redux toolkit under the hood with the name of each reducer function to create it type.
+- `initialState` property which is the initial value of the user state object as defined earlier.
+- `reducers`: These are the functions that will be used to dispatch actions that mutates the state of this slice directly although under the hood it don't `mutate` the state, `redux toolkit` makes it seem true.
+- `extraReducers`: These are functions that can tap into asynchronuous operations like `asyncThunk` functions or middlewares created with the redux toolkit's `createAsyncThunk` function to update state base on states of the asynchronuous functions operations.[ Learn more about createAsyncThunk](https://red ux-toolkit.js.org/api/createAsyncThunk).
+
+After creating the `userSlice` the next thing is to export all the reducers actions
+```
+export const { updateProfile, updateAuthStatus } = userSlice.actions;
+```
+Notice that the middleware function `fetchUserById` is already exported when it was defined so it is already available to other parts of the app and can be used in dispatch to dispatch state actions just like normal reducers.
+
+Finally we export  our slice as `userSlice.reducer`
+```
+export default userSlice.reducer;
+```
+
