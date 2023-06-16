@@ -464,5 +464,39 @@ This line of code `const User = mongoose.model('User', UserSchema);` creates the
 
 ### Controllers
 All controllers for each route a written inside the `controllers/` directory. Controllers are responsible for handling incoming requests and returning responses to the client. We will only use them to create routes.
+Below is a controller handle route to create a category 👇
+```
+import { Request, Response } from 'express';
+import { Category } from '../../models/categoryModel';
+
+export const createCategory = async (req: Request, res: Response) => {
+	const payload = req.body;
+	if (payload.name === '') {
+		return res.status(400).json({
+			success: false,
+			message: 'bad request body',
+		});
+	}
+	try {
+		const created = await Category.create({
+			...payload,
+		});
+		res.status(200).json({
+			success: true,
+			message: 'create category successful',
+			category: { id: created._id.toString(), name: created.name },
+		});
+	} catch (error) {
+		return res.status(422).json({
+			success: false,
+			message: 'unprocessible',
+		});
+	}
+};
+
+```
+
+### Routes
+
 
 
