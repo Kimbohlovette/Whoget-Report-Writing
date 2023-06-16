@@ -401,6 +401,71 @@ app.use(express.json());
 ```
 Before you start the dev server, install `nodemon` with `npm install --dev nodemon` and head to the `package.json` file and add `"dev": "nodemon ./src/app.ts",` to the `script` section.
 
-Start the dev server with `npm run dev`.
+Start the dev server with `npm run dev`. You minimal app should be up and running by now. We head over to creating models for our data.
+
+### Creating data Models
+
+The whoget application has three main models namely: `Users`, `Asks`, `Categories`. We are going to demonstrate on the `User` model and the rest will follow.
+
+To create the `User model` we first need to create a `UserSchema` and use it to create a model.
+
+```
+import mongoose from 'mongoose';
+
+const UserSchema = new mongoose.Schema(
+	{
+		name: {
+			type: String,
+			required: [true, 'Name field cannot be empty.'],
+		},
+		phoneNumber: {
+			type: String,
+			required: false,
+		},
+		email: {
+			type: String,
+			required: [true, 'Email field cannot be empty.'],
+		},
+		location: {
+			type: String,
+			required: false,
+		},
+		profileImage: {
+			type: String,
+			required: false,
+		},
+		role: {
+			type: String,
+			required: [true, 'Profile Image Url field cannot be empty.'],
+		},
+		status: {
+			type: String,
+			required: [true, 'User status field cannot be empty.'],
+		},
+		activities: {
+			type: String,
+			required: false,
+		},
+		uid: {
+			type: String,
+			required: [true, 'uid field is required'],
+		},
+	},
+	{ timestamps: true }
+);
+UserSchema.index({ '$**': 'text' });
+const User = mongoose.model('User', UserSchema);
+
+export { User };
+```
+On the code block above, we created a `UserSchema` and used it to create and export the `User` model. The `mongoose.Schema()` takes an object parameter whose `(key,value)` pairs denote the properties of the `User` and their corresponding values denote the validation rules for that property or fields.
+
+This line of code `const User = mongoose.model('User', UserSchema);` creates the `User` model.
+
+### Defining Routes
+
+
+
+
 
 
