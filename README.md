@@ -321,4 +321,86 @@ We will see how to build the backend `api` endpoints to query and manipulate dat
 - `Express` is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. [Learn more about Express here.](https://expressjs.com/).
 - `Mongoose` is a Object Document Mapper for MongoDB and NodJS. Mongoose provides a straight-forward, schema-based solution to model your application data. [Learn more about mongoose here](https://mongoosejs.com/).
 - `firebase-admin` is a set of server libraries that lets you interact with Firebase from privileged environments to perform actions like create your own simplified admin console to do things like look up user data or change a user's email address for authentication. [Learn more about firebase-admin here](https://firebase.google.com/docs/admin/setup).
-- `MongoDB` is a non relational database management system for storing and managing all forms of data.
+- `MongoDB` is a non relational database management system for storing and managing a wide range of data types.
+
+### Codebase structure
+
+```
+src
+│   ├── app.ts
+│   ├── controllers
+│   │   ├── ask
+│   │   │   ├── createAsk.ts
+│   │   │   ├── deleteAsk.ts
+│   │   │   ├── getAllAsks.ts
+│   │   │   ├── getAskById.ts
+│   │   │   ├── getPagenatedAsks.ts
+│   │   │   ├── updateAskStatus.ts
+│   │   │   └── updateAsk.ts
+│   │   ├── category
+│   │   │   ├── createCategory.ts
+│   │   │   ├── deleteCategory.ts
+│   │   │   ├── getAsksByCategory.ts
+│   │   │   └── getPaginatedCategories.ts
+│   │   ├── searchAndFilters
+│   │   │   ├── filterAsks.ts
+│   │   │   └── search.ts
+│   │   └── user
+│   │       ├── createUser.ts
+│   │       ├── deleteUser.ts
+│   │       ├── getAllUsers.ts
+│   │       ├── getAsksByUserId.ts
+│   │       ├── getPaginatedUsers.ts
+│   │       ├── getUserByEmail.ts
+│   │       ├── getUserById.ts
+│   │       ├── getUserByUid.ts
+│   │       ├── updateUserStatus.ts
+│   │       └── updateUser.ts
+│   ├── firebase.ts
+│   ├── middlewares
+│   │   └── auth.ts
+│   ├── mockdata.json
+│   ├── models
+│   │   ├── askModel.ts
+│   │   ├── categoryModel.ts
+│   │   └── userModel.ts
+│   ├── populateDatabase.js
+│   ├── routes
+│   │   ├── askRoutes.ts
+│   │   ├── categoryRoutes.ts
+│   │   ├── searchRoutes.ts
+│   │   └── userRoutes.ts
+│   └── types.d.ts
+└── tsconfig.json
+
+```
+We start by initializing our app inside `app.ts`
+
+```
+const app = express(); // express is imported from express
+```
+Connect our app to mongodb using a mongodb url copied from mongodb app created at `https://mongodb.com`
+
+```
+mongoose
+	.connect(mongoConnectionPath)
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`Listening on port ${port}...`);
+		});
+	})
+	.catch((error) => {
+		console.log(error);
+	});
+```
+We then add some `express middlewares` to app.
+
+```
+app.use(express.static('./public'));
+app.use(express.json());
+```
+Before you start the dev server, install `nodemon` with `npm install --dev nodemon` and head to the `package.json` file and add `"dev": "nodemon ./src/app.ts",` to the `script` section.
+
+Start the dev server with `npm run dev`.
+
+
