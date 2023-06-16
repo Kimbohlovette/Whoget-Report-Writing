@@ -298,3 +298,19 @@ After building your application, you can generate an `apk` that can be installed
 ```
 This command builds your applicaton and create an apk which can be found in `./android/app/build/outputs/apk/release/` directory
 For more instructions on how to build a signed apk [visit the React Native official documentation](https://reactnative.dev/docs/signed-apk-android)
+
+To generate the AAB file for publishing to playstore, run the command below.
+
+```
+./gradlew bundleRelease
+```
+This command generates an release.aab file which is found in `android/app/release/` directory. 
+- This `release.aab` file is now ready to published to playstore.
+- On the google play console create a new app and navigate to its `Dashboard`. 
+- On the side menu tab on `Testing> Internal testing` and upload the `release.aab` file. 
+- Add the `emails` of all your `testers` by navigating to the `Testers` tab.
+- Scroll to the end and copy `link` to your test app on playstore and share with your testers.
+- When all tests are done and all reviews fixed, publish app on `Open testing` and urge even more people to download the app on playstore and drop reviews.
+- Publish in `Production` and that's it. You app is available for production.🎉
+
+NOTE* _In order for firebase services to work in your app published on playstore you need to navigate to `Setup>App Integrity`, click on `App signing` tab and copy the `SHA-1` string and add to the list of `Fingerprints` on the firebase app you created for your react native Project._
