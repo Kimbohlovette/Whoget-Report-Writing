@@ -316,4 +316,8 @@ This command generates an release.aab file which is found in `android/app/releas
 NOTE* _In order for firebase services to work in your app published on playstore you need to navigate to `Setup> App Integrity`, click on `App signing` tab and copy the `SHA-1` string and add to the list of `Fingerprints` on the firebase app you created for your react native Project._
 
 ## Backend API
-We will see how to build the backend `api` endpoints to query and manipulate data in the database. We will use ExpressJS, MongoDB, Mongoose, Firebase Admin, 
+We will see how to build the backend `api` endpoints to query and manipulate data in the database. We will use `ExpressJS`, `MongoDB`, `Mongoose`, `firebase-admin`.
+
+- `Express` is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. [Learn more about Express here.](https://expressjs.com/).
+- `Mongoose` is a Object Document Mapper for MongoDB and NodJS. Mongoose provides a straight-forward, schema-based solution to model your application data. [Learn more about mongoose here](https://mongoosejs.com/).
+- `firebase-admin` is a set of server libraries that lets you interact with Firebase from privileged environments to perform actions like create your own simplified admin console to do things like look up user data or change a user's email address for authentication. [Learn more about firebase-admin here](https://firebase.google.com/docs/admin/setup).
