@@ -462,7 +462,7 @@ On the code block above, we created a `UserSchema` and used it to create and exp
 
 This line of code `const User = mongoose.model('User', UserSchema);` creates the `User` model.
 
-### Defining controllers
+### Controllers
 All controllers for each route a written inside the `controllers/` directory. Controllers are responsible for handling incoming requests and returning responses to the client. We will only use them to create routes.
 
 
