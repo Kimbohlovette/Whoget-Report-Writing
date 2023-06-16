@@ -321,3 +321,4 @@ We will see how to build the backend `api` endpoints to query and manipulate dat
 - `Express` is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. [Learn more about Express here.](https://expressjs.com/).
 - `Mongoose` is a Object Document Mapper for MongoDB and NodJS. Mongoose provides a straight-forward, schema-based solution to model your application data. [Learn more about mongoose here](https://mongoosejs.com/).
 - `firebase-admin` is a set of server libraries that lets you interact with Firebase from privileged environments to perform actions like create your own simplified admin console to do things like look up user data or change a user's email address for authentication. [Learn more about firebase-admin here](https://firebase.google.com/docs/admin/setup).
+- `MongoDB` is a non relational database management system for storing and managing all forms of data.
