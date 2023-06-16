@@ -313,4 +313,7 @@ This command generates an release.aab file which is found in `android/app/releas
 - When all tests are done and all reviews fixed, publish app on `Open testing` and urge even more people to download the app on playstore and drop reviews.
 - Publish in `Production` and that's it. You app is available for production.🎉
 
-NOTE* _In order for firebase services to work in your app published on playstore you need to navigate to `Setup>App Integrity`, click on `App signing` tab and copy the `SHA-1` string and add to the list of `Fingerprints` on the firebase app you created for your react native Project._
+NOTE* _In order for firebase services to work in your app published on playstore you need to navigate to `Setup> App Integrity`, click on `App signing` tab and copy the `SHA-1` string and add to the list of `Fingerprints` on the firebase app you created for your react native Project._
+
+## Backend API
+We will see how to build the backend `api` endpoints to query and manipulate data in the database. We will use ExpressJS, MongoDB, Mongoose, Firebase Admin, 
