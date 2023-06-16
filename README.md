@@ -605,4 +605,5 @@ export const verifyAuthToken = (
 ```
 The `verifyAuthToken` middleware uses the `verifyIdToken()` method from `firebase-admin/auth` to verify the `jwt token`. It also check if a user is an administrator in the system. Every endpoint that is guarded by this `middleware` can only be accessed by adminstrators with valid `idTokens`. The `auth.verifyIdToken()` also checks for invalid tokens or malformed and expired tokens.
 
+Below is an example of where the middleware function has been applied on a route to protect it.
 
