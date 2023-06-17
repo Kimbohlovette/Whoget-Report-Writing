@@ -655,9 +655,13 @@ export const verifyAuthToken = (
 The `verifyAuthToken` middleware uses the `verifyIdToken()` method from `firebase-admin/auth` to verify the `jwt token`. It also check if a user is an administrator in the system. Every endpoint that is guarded by this `middleware` can only be accessed by adminstrators with valid `idTokens`. The `auth.verifyIdToken()` also checks for invalid tokens or malformed and expired tokens.
 
 Below is an example of where the middleware function has been applied on a route to protect it.
+
 ![Screenshot_9](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/51ff097c-3393-4eca-bb6a-cf1ce1748d0c)
 
 
-We have used the middleware we just created to guard who updates the status of an Ask in the system. Only authenticated administrators should be able to do that.
+We have used the middleware we just created to guard who updates the status of an Ask in the system. Only authenticated administrators should be able to do `hide`/unhide` an ask.
+
+### Usage
+The usage guide to this backend api can be found in the [WhoGet API documentation](https://github.com/Kimbohlovette/whoget-app-server/blob/main/readme.md#api-endpoints).
 
 
