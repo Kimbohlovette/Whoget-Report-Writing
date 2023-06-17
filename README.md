@@ -464,7 +464,7 @@ This line of code `const User = mongoose.model('User', UserSchema);` creates the
 
 ### Controllers
 All controllers for each route a written inside the `controllers/` directory. Controllers are responsible for handling incoming requests and returning responses to the client. We will only use them to create routes.
-Below is a controller handle route to create a category 👇
+Below is a controller that  handle the route to create a category 👇
 ```
 import { Request, Response } from 'express';
 import { Category } from '../../models/categoryModel';
@@ -527,6 +527,55 @@ router.get('/:id/asks', getAsksByUserId);
 router.get('/email/:email', getUserByEmail);
 
 export default router;
+```
+We have configured the routes and exported them. What is left is to import the router into the `app.ts` file and complete the application.
+
+```
+import express from 'express';
+import askRoutes from './routes/askRoutes';
+import userRoutes from './routes/userRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+import searchRoutes from './routes/searchRoutes';
+import mongoose from 'mongoose';
+import cors from 'cors';
+
+require('dotenv').config();
+const port = process.env.PORT || 5000;
+const dbUserName = process.env['MONGODB_NAME'];
+const mongodbPwd = process.env['MONGODB_PWD'];
+const mongodbAppName = process.env['MONGODB_APPNAME'];
+const mongodbDatabaseName = process.env['MONGODB_DBNAME'];
+
+const mongoConnectionPath = `mongodb+srv://${dbUserName}:${mongodbPwd}@${mongodbAppName}.mongodb.net/${mongodbDatabaseName}?retryWrites=true&w=majority`;
+
+const app = express();
+mongoose
+	.connect(mongoConnectionPath)
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`Listening on port ${port}...`);
+		});
+	})
+	.catch((error) => {
+		console.log(error);
+	});
+
+app.use(express.static('./public'));
+app.use(express.json());
+app.use(
+	cors({
+		origin: '*',
+	})
+);
+
+app.use('/api/v1/asks', askRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/search', searchRoutes);
+```
+We use the configured routes for `asks`, `users`, `categories`, `search` related endpoints. What we did was more like grouping the routes that are related to each other.
+```
+app.use('/api/v1/users', userRoutes);
 ```
 ### Middleware for token verification and checking user permissions
 
@@ -606,4 +655,8 @@ export const verifyAuthToken = (
 The `verifyAuthToken` middleware uses the `verifyIdToken()` method from `firebase-admin/auth` to verify the `jwt token`. It also check if a user is an administrator in the system. Every endpoint that is guarded by this `middleware` can only be accessed by adminstrators with valid `idTokens`. The `auth.verifyIdToken()` also checks for invalid tokens or malformed and expired tokens.
 
 Below is an example of where the middleware function has been applied on a route to protect it.
+![Screenshot_1](https://github.com/Kimbohlovette/Whoget-Report-Writing/assets/37558983/d6a11330-d54d-457a-afc6-429a42a7faf1)
+
+We have used the middleware we just created to guard who updates the status of an Ask in the system. Only authenticated administrators should be able to do that.
+
 
