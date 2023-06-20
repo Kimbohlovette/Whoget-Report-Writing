@@ -10,8 +10,6 @@
 
 In this article I am going to work you through the process of building a fitness mobile application with React Native & Firebase.
 
-## Frontend
-
 ### Installation guide
 
 If you are new to React Native then follow the installation guide on the [React Native official documentation
@@ -321,3 +319,62 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 ```
+
+### Setup Drawer Navigation - The overview page
+
+In section we want to build a left drawer that will display Each workout, and a brief description of what it is and the kind of exercises under it.
+
+There are two ways to implement drawer nevigation in React Native
+
+-   Using the native `DrawerLayoutAndroid` or
+-   Using the `createDrawerNavigation` function from `React Navigation` library.
+
+In this tutorial we will use `DrawerLayoutAndroid`.
+
+We will make use of the following `DrawerLayoutAndroid` `props`
+
+-   `drawerBackgroundColor` to set the background color of the drawer view.
+-   `drawerWidth` to set the `width` of the drawer view.
+-   `drawerPosition` to set the position of the drawer view - (`left`, `right`)
+-   `renderNavigationView`: the props whose value is the the drawer container view.
+
+In order to class the drawer manually we will use the react's `useRef` hook to reference the `DrawerLayoutAndroid` component and we can use its `closeDrawer()` method.
+
+Let's define the navigation view
+
+```
+  const navigationView = () => {
+    return (
+      <View>
+        <View>
+          <Pressable
+            style={appStyles.closeDrawerBtn}
+            android_ripple={{ color: Colors.primaryDark.backgroundColor }}
+            onPress={() => drawer.current?.closeDrawer()}>
+            <Icon name="arrow-left" size={25} color={Colors.onPrimary.color} />
+          </Pressable>
+        </View>
+        <Overview />
+      </View>
+    );
+  };
+```
+
+Finally the drawer navigation setup is implemented in the `App.tsx` as follows
+
+```
+    <DrawerLayoutAndroid
+      drawerBackgroundColor={Colors.primary.backgroundColor}
+      ref={drawer}
+      drawerWidth={320}
+      renderNavigationView={navigationView}
+      drawerPosition={'left'}>
+      <Header drawer={drawer} />
+      <StatusBar backgroundColor={Colors.primaryDark.backgroundColor} />
+      <Home />
+    </DrawerLayoutAndroid>
+```
+
+Check the `App.tsx` full setup.
+
+### Implementing the core
