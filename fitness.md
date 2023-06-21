@@ -378,3 +378,268 @@ Finally the drawer navigation setup is implemented in the `App.tsx` as follows
 Check the `App.tsx` full setup.
 
 ### Implementing the core
+
+We want to jump into the real business. The countdown logic is done in the `Home.tsx` file.
+
+Firstly pull out all the workouts from the store as follows
+
+```
+const workouts = useAppSelector(state => state.workout.workouts);
+```
+
+Define local states `workout`, `timer`, `index`, `countState` to hold the current workout, timer value, index of each workout in the workouts array and the state of the countdown respectively.
+
+```
+  const [workout, setWorkout] = useState<Workout>(workouts[0]);
+  const [timer, setTimer] = useState<number>(workout.duration);
+  const [index, setIndex] = useState<number>(0);
+  const [countState, setCountdownState] = useState<
+    'idle' | 'inProgress' | 'resting'
+  >('idle');
+```
+
+Define a function `setNextWork` that sets the next workout. It takes the previous index as parameter.
+
+```
+  const setNextWorkout = (prevIndex: number) => {
+    if (prevIndex >= workouts.length - 1) {
+      setWorkout(workouts[0]);
+      return 0;
+    } else {
+      setWorkout(workouts[prevIndex + 1]);
+      return prevIndex + 1;
+    }
+  };
+```
+
+Define the `startTimerCountdown()`. This function does the countdown of the current workout. That is, the workout which is currently held in `workout` state variable.
+
+```
+  const startTimerCountdown = () => {
+    setTimer(workout.duration);
+    setCountdownState('inProgress');
+    const countId = setInterval(() => {
+      setTimer(state => {
+        if (state === 0) {
+          clearInterval(countId);
+          setCountdownState('resting');
+          return 0;
+        }
+        if (state <= 10) {
+          RNSystemSounds.beep();
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
+```
+
+We define the `startRestTimerCountown()`. This function counts down on the duration of the rest of the current workout.
+
+```
+  const startRestTimerCountdown = () => {
+    setTimer(workout.postRestTime + 5);
+    const restCountId = setInterval(() => {
+      RNSystemSounds.beep();
+      setTimer(state => {
+        if (state === 0) {
+          setCountdownState('idle');
+          clearInterval(restCountId);
+          setIndex(setNextWorkout(index));
+          return 0;
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
+```
+
+The last function is the `startCoundown()` function which is what triggers the other functions. It is used in the `onPress()` callback to trigger start when the button is clicked.
+
+```
+  const handleStart = () => {
+    startTimerCountdown();
+  };
+```
+
+We want to start counting immediately the `index` value changes. This is because the the next index value is set only at the end of the current workout. So it can also be used as a signal that it's time to start another countdown.
+
+```
+  useEffect(() => {
+    Tts.speak(workout.title);
+    if (index) {
+      startTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+```
+
+We want to start counting rest time when the state of the `countState` state variable changes to `resting`.
+
+```
+  useEffect(() => {
+    if (countState === 'resting') {
+      Tts.speak('Break Time');
+      startRestTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countState]);
+```
+
+After setting up the logic as above, the `Home.tsx` looks like the code block below.
+
+```
+import RNSystemSounds from '@dashdoc/react-native-system-sounds';
+import React, { useEffect, useState } from 'react';
+import { Text, ScrollView, View, Pressable } from 'react-native';
+import { Colors } from '../../Styles';
+import { homeStyles } from './HomeStyles';
+import { useAppSelector } from '../../store/hooks/index';
+import { Workout } from '../../types';
+import Icon from 'react-native-vector-icons/Entypo';
+import Tts from 'react-native-tts';
+
+const Home = () => {
+  const workouts = useAppSelector(state => state.workout.workouts);
+  const [workout, setWorkout] = useState<Workout>(workouts[0]);
+  const [timer, setTimer] = useState<number>(workout.duration);
+  const [index, setIndex] = useState<number>(0);
+  const [countState, setCountdownState] = useState<
+    'idle' | 'inProgress' | 'resting'
+  >('idle');
+
+  const setNextWorkout = (prevIndex: number) => {
+    if (prevIndex >= workouts.length - 1) {
+      setWorkout(workouts[0]);
+      return 0;
+    } else {
+      setWorkout(workouts[prevIndex + 1]);
+      return prevIndex + 1;
+    }
+  };
+
+  const startTimerCountdown = () => {
+    setTimer(workout.duration);
+    setCountdownState('inProgress');
+    const countId = setInterval(() => {
+      setTimer(state => {
+        if (state === 0) {
+          clearInterval(countId);
+          setCountdownState('resting');
+          return 0;
+        }
+        if (state <= 10) {
+          RNSystemSounds.beep();
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
+
+  const startRestTimerCountdown = () => {
+    setTimer(workout.postRestTime + 5);
+    const restCountId = setInterval(() => {
+      RNSystemSounds.beep();
+      setTimer(state => {
+        if (state === 0) {
+          setCountdownState('idle');
+          clearInterval(restCountId);
+          setIndex(setNextWorkout(index));
+          return 0;
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
+
+  const handleStart = () => {
+    startTimerCountdown();
+  };
+
+  useEffect(() => {
+    Tts.speak(workout.title);
+    if (index) {
+      startTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
+  useEffect(() => {
+    if (countState === 'resting') {
+      Tts.speak('Break Time');
+      startRestTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countState]);
+
+  return (
+    <ScrollView style={[homeStyles.container, Colors.primary]}>
+      {countState !== 'resting' ? (
+        <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
+          {index + 1}. {workout.title}
+        </Text>
+      ) : (
+        <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
+          Take a Breath.
+        </Text>
+      )}
+      <View style={homeStyles.mainView}>
+        <Text style={[homeStyles.countDown, Colors.onPrimary]}>{timer}</Text>
+        <View style={[homeStyles.divider]} />
+        <View style={homeStyles.workoutDesc}>
+          {workout.exercises.map((wrkout, key) => (
+            <Text style={homeStyles.workoutDescText} key={key}>
+              <Icon name="dot-single" size={15} color="lightgray" />
+              {wrkout}
+            </Text>
+          ))}
+        </View>
+        <View style={[homeStyles.cardsContainerView]}>
+          <View style={[homeStyles.cardView]}>
+            <Text style={[homeStyles.cardTitleText]}>Difficulty</Text>
+            <Text style={homeStyles.cardText}>Normal</Text>
+          </View>
+          <View style={[homeStyles.cardView]}>
+            <Text style={[homeStyles.cardTitleText]}>Duration</Text>
+            <Text style={homeStyles.cardText}>{workout?.duration} mins</Text>
+          </View>
+          <View style={[homeStyles.cardView]}>
+            <Text style={[homeStyles.cardTitleText]}>Rest</Text>
+            <Text style={homeStyles.cardText}>
+              {workout?.postRestTime} mins
+            </Text>
+          </View>
+        </View>
+        <View style={homeStyles.startBtnContainer}>
+          <Pressable
+            disabled={countState !== 'idle'}
+            onPress={handleStart}
+            android_ripple={{ color: '#b91c1c' }}
+            style={[homeStyles.startBtn]}>
+            <Text style={homeStyles.startBtnText}>START</Text>
+          </Pressable>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default Home;
+```
+
+-   All styles are objects are imported from the `homeStyles.ts` file.
+
+-   As a side note, I want to indicate that all icons used in this exercise were imported from `react-native-vector-icons` library. So If you are following, you can download as follows
+
+```
+npm install --save react-native-vector-icons
+```
+
+-   In some parts of the code in this `Home.tsx` I used `Tts.speak()`. This is a text to speech react native library that reads every string you pass to it at loud in English.
+
+```
+npm install --save react-native-tts
+```
+
+Congratulations! You have successfully implemented a fitness mobile application. The debug version should be good for now.
+
+If you want to generate a `release` `apk` or `release` `aab` so that you can publish on playstore, follow the [Publishing to play store](https://reactnative.dev/docs/signed-apk-android) section of the react native documentation.
